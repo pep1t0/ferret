@@ -1,0 +1,12 @@
+Target: http://thetoppers.htb/
+Total requests: 4989
+==================================================================
+ID    Response   Lines      Word         Chars          Request    
+==================================================================
+00247:  C=404      0 L	       2 W	     21 Ch	  "s3"
+00689:  C=400     10 L	      35 W	    306 Ch	  "gc._msdcs"
+
+Total time: 0
+Processed Requests: 4989
+Filtered Requests: 4987
+Requests/sec.: 0

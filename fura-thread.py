@@ -10,13 +10,13 @@ os.system('clear')
 FILE_TO_PROCESS = 'subdomains-top1million-5000.txt'
 DOMAIN_TO_PROCESS = 'thetoppers.htb'
 
-NUM_WORKERS = 5
+NUM_WORKERS = 3
 
 def check_subdomain(address, timeout=2):
     try:
         resp = requests.get(address, timeout=timeout)
         resp.raise_for_status()
-        print('[EXISTE] El dominio existe!!!',address, resp, '\n',sep='\t')
+        print('[EXISTE!!!!!!!!!!!] El dominio existe!!!',address, resp, '\n',sep='\t')
     except requests.exceptions.HTTPError as err:
         print('[HTTPError]', address)
     except requests.exceptions.ConnectionError as err:
@@ -42,9 +42,9 @@ def file_fuzz (name_file, domain):
     except Exception as exc:
         print('[ERROR] El fichero no se pudo abrir:', os.strerror(exc.errno))
 
-def fura_web():
+def fura_web(file_p, domain_p):
     
-    webby = file_fuzz(FILE_TO_PROCESS, DOMAIN_TO_PROCESS)
+    webby = file_fuzz(file_p, domain_p)
     
     start_time = time.time()
     
@@ -57,5 +57,5 @@ def fura_web():
     print('Tiempo transcurrido: %ssecs',(end_time - start_time))
         
 print('INICIO DEL PROCESADO\n')    
-fura_web()
+fura_web (FILE_TO_PROCESS, DOMAIN_TO_PROCESS)
 
