@@ -1,8 +1,10 @@
-from socket import timeout
-from urllib.request import Request
+# from socket import timeout
+# from urllib.request import Request
 import requests
 import os
 import time
+import concurrent.futures
+
 
 os.system('cls')
 
@@ -42,26 +44,29 @@ WEBSITE_LIST = [
     'http://bing.com',
 ]
 
+NUM_WORKERS = 5
+
 def check_subdomain(address, timeout=2):
     try:
         resp = requests.head(address, timeout=2)
         resp.raise_for_status()
-        print('El dominio existe',resp)
+        print('El dominio existe',address,resp,sep='')
 
     except requests.exceptions.HTTPError as err:
         print('[HTTPError]',err)
     except requests.exceptions.ConnectionError as err:
-        print('[URL Erronea]',address, 'El dominio no existe,err',sep='')
+        print('[URL Erronea]',address, 'El dominio no existe',err,sep='')
     except requests.exceptions.Timeout as err:
         print('Excedido el tiempo de espera',err)
     except requests.exceptions.RequestException as err:
         print('Error general',err)
 
-
+print('START PoC')
 start_time = time.time()
 
-for address in WEBSITE_LIST:
-    check_subdomain(address,3)
+with concurrent.futures.ThreadPoolExecutor(max_workers=NUM_WORKERS) as executor:
+    futures = {executor.submit(check_subdomain, address) for address in WEBSITE_LIST}
+    concurrent.futures.wait(futures)
 
 end_time = time.time()
 
