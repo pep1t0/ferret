@@ -46,7 +46,7 @@ def check_subdomain(address, timeout=2):
     try:
         resp = requests.head(address, timeout=2)
         resp.raise_for_status()
-        print('El dominio existe',resp)
+        print('El dominio existe',address, resp)
 
     except requests.exceptions.HTTPError as err:
         print('[HTTPError]',err)

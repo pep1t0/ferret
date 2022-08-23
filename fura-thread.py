@@ -8,7 +8,7 @@ import concurrent.futures
 
 os.system('cls')
 
-WEBSITE_LIST = [
+WEBLIST = [
     'https://envato.com',
     'http://amazon.co.uk',
     'http://amazon.com',
@@ -44,30 +44,56 @@ WEBSITE_LIST = [
     'http://bing.com',
 ]
 
+
 NUM_WORKERS = 5
 
 def check_subdomain(address, timeout=2):
     try:
-        resp = requests.head(address, timeout=2)
+        print('Direccion:', address)
+        resp = requests.head(address, timeout=timeout)
         resp.raise_for_status()
-        print('El dominio existe',address,resp,sep='')
-
+        print('El dominio existe',address, resp, '\n',sep=' ')
     except requests.exceptions.HTTPError as err:
-        print('[HTTPError]',err)
+        print('[HTTPError]', address)
     except requests.exceptions.ConnectionError as err:
-        print('[URL Erronea]',address, 'El dominio no existe',err,sep='')
+        print('[URL Erronea] No existe',address, sep='')
     except requests.exceptions.Timeout as err:
-        print('Excedido el tiempo de espera',err)
+        print('Excedido el tiempo de espera', address)
     except requests.exceptions.RequestException as err:
-        print('Error general',err)
+        print('Error general', err)
+ 
 
-print('START PoC')
-start_time = time.time()
+def file_fuzz (name_file, domain):
+      
+    try:
+        s = open(name_file,'r')
+        fuzz_list = s.readlines()
+        fuzz_list = [line.rstrip('\n') for line in fuzz_list] # Eliminamos el retorno de carro \n que se añade en linux con readlines
 
-with concurrent.futures.ThreadPoolExecutor(max_workers=NUM_WORKERS) as executor:
-    futures = {executor.submit(check_subdomain, address) for address in WEBSITE_LIST}
-    concurrent.futures.wait(futures)
+        website_list = [('http://' + fuzz + '.' + domain) for fuzz in fuzz_list]
+        s.close()
 
-end_time = time.time()
+        return website_list
 
-print('Tiempo transcurrido: %ssecs',(end_time - start_time))
+    except Exception as exc:
+        print('[ERROR] El fichero no se pudo abrir:', os.strerror(exc.errno))
+
+def fura_web():
+    
+    webby = file_fuzz('subdomains.txt','google.es')
+    print('START PoC')
+    start_time = time.time()
+    
+    with concurrent.futures.ThreadPoolExecutor(max_workers=NUM_WORKERS) as executor:
+        futures = {executor.submit(check_subdomain, address,1) for address in webby}
+        concurrent.futures.wait(futures)
+        
+    end_time = time.time()
+
+    print('Tiempo transcurrido: %ssecs',(end_time - start_time))
+        
+    
+
+
+fura_web()
+
