@@ -5,23 +5,22 @@ import os
 import time
 import concurrent.futures
 
-#os.system('cls')
+os.system('clear')
 
 FILE_TO_PROCESS = 'subdomains.txt'
-DOMAIN_TO_PROCESS = 'google.es'
+DOMAIN_TO_PROCESS = 'thetoppers.htb'
 
 NUM_WORKERS = 5
 
 def check_subdomain(address, timeout=2):
     try:
-        print('Direccion:', address)
-        resp = requests.head(address, timeout=timeout)
+        resp = requests.get(address, timeout=timeout)
         resp.raise_for_status()
-        print('El dominio existe',address, resp, '\n',sep=' ')
+        print('[EXISTE] El dominio existe!!!',address, resp, '\n',sep='\t')
     except requests.exceptions.HTTPError as err:
         print('[HTTPError]', address)
     except requests.exceptions.ConnectionError as err:
-        print('[URL Erronea] No existe',address, sep='')
+        print('[URL Erronea] No existe',address, sep='\t')
     except requests.exceptions.Timeout as err:
         print('Excedido el tiempo de espera', address)
     except requests.exceptions.RequestException as err:
@@ -57,6 +56,6 @@ def fura_web():
 
     print('Tiempo transcurrido: %ssecs',(end_time - start_time))
         
-    
+print('INICIO DEL PROCESADO\n')    
 fura_web()
 
