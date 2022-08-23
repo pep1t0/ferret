@@ -7,7 +7,7 @@ import concurrent.futures
 
 os.system('clear')
 
-FILE_TO_PROCESS = 'subdomains.txt'
+FILE_TO_PROCESS = 'subdomains-top1million-5000.txt'
 DOMAIN_TO_PROCESS = 'thetoppers.htb'
 
 NUM_WORKERS = 5
