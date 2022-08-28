@@ -17,19 +17,19 @@ def check_subdomain(address, timeout=2):
         resp = requests.get(address, timeout=timeout)
         
         resp.raise_for_status()
-    #    print('[EXISTE!!!!!!!!!!!] El dominio existe!!!',address, resp, '\n',sep='\t')
+        print('[!] El dominio existe!!!',address, resp, '\n',sep='\t')
     
     except requests.exceptions.HTTPError as err:
         #if err.response.status_code == 404:
         print("[+] Descubierto subdominio:",address)
         
     except requests.exceptions.ConnectionError:
-        # print('[URL Erronea] No existe',address, sep='\t')
+        print('[URL Erronea] No existe',address, sep='\t')
         pass
-    #except requests.exceptions.Timeout as err:
-    #    print('Excedido el tiempo de espera', address)
-    #except requests.exceptions.RequestException as err:
-    #    print('Error general', err)
+    except requests.exceptions.Timeout as err:
+        print('Excedido el tiempo de espera', address)
+    except requests.exceptions.RequestException as err:
+        print('Error general', err)
     else:
         print("[+] Descubierto subdominio:",address)
  
